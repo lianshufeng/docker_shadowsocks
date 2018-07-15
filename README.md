@@ -76,3 +76,7 @@ kcpclient -r SSSERVER_IP:6500 -l :6500 -mode fast2
 ``` sh
 docker run -dt --name ss -p 6443:6443 -p 6500:6500/udp -e SS_CONFIG="-s 0.0.0.0 -p 6443 -m aes-256-cfb -k test123 --fast-open" -e KCP_MODULE="kcpserver" -e KCP_CONFIG="-t 127.0.0.1:6443 -l :6500 -mode fast2" -e KCP_FLAG="true" lianshufeng/shadowsocks
 ```
+
+
+#### 客户端
+[进入下载页面](https://github.com/shadowsocks/shadowsocks-windows/releases/)
