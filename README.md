@@ -7,7 +7,7 @@
 ### 打开姿势
 
 ``` sh
-docker run -dt --name ss -p 6443:6443 lianshufeng/shadowsocks -s "-s 0.0.0.0 -p 6443 -m aes-256-cfb -k xiaofengfeng --fast-open"
+docker run --restart=always -dt --name ss -p 6443:6443 lianshufeng/shadowsocks -s "-s 0.0.0.0 -p 6443 -m aes-256-cfb -k xiaofengfeng --fast-open"
 ```
 
 ### 支持选项
