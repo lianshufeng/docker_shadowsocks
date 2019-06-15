@@ -1,13 +1,10 @@
 ## shadowsocks
 
 
-- **shadowsocks-libev 版本: 3.2.0**
-- **kcptun 版本: 20180316**
-
 ### 打开姿势
 
 ``` sh
-docker run --restart=always -dt --name ss -p 6443:6443 lianshufeng/shadowsocks -s "-s 0.0.0.0 -p 6443 -m aes-256-cfb -k xiaofengfeng --fast-open"
+docker run -dt --name ss -p 8756:6443 lianshufeng/shadowsocks -s "-s 0.0.0.0 -p 6443 -m chacha20-ietf-poly1305 -k xiaofengfeng"
 ```
 
 ### 支持选项
@@ -31,26 +28,26 @@ docker run --restart=always -dt --name ss -p 6443:6443 lianshufeng/shadowsocks -
 **Server 端**
 
 ``` sh
-docker run -dt --name ssserver -p 6443:6443 -p 6500:6500/udp lianshufeng/shadowsocks -m "ss-server" -s "-s 0.0.0.0 -p 6443 -m aes-256-cfb -k xiaofengfeng --fast-open" -x -e "kcpserver" -k "-t 127.0.0.1:6443 -l :6500 -mode fast2"
+docker run -dt --name ssserver -p 6443:6443 -p 6500:6500/udp lianshufeng/shadowsocks -m "ss-server" -s "-s 0.0.0.0 -p 6443 -m chacha20-ietf-poly1305 -k test123" -x -e "kcpserver" -k "-t 127.0.0.1:6443 -l :6500 -mode fast2"
 ```
 
 **以上命令相当于执行了**
 
 ``` sh
-ss-server -s 0.0.0.0 -p 6443 -m aes-256-cfb -k xiaofengfeng --fast-open
+ss-server -s 0.0.0.0 -p 6443 -m chacha20-ietf-poly1305 -k test123
 kcpserver -t 127.0.0.1:6443 -l :6500 -mode fast2
 ```
 
 **Client 端**
 
 ``` sh
-docker run -dt --name ssclient -p 1080:1080 lianshufeng/shadowsocks -m "ss-local" -s "-s 127.0.0.1 -p 6500 -b 0.0.0.0 -l 1080 -m aes-256-cfb -k xiaofengfeng --fast-open" -x -e "kcpclient" -k "-r SSSERVER_IP:6500 -l :6500 -mode fast2"
+docker run -dt --name ssclient -p 1080:1080 lianshufeng/shadowsocks -m "ss-local" -s "-s 127.0.0.1 -p 6500 -b 0.0.0.0 -l 1080 -m chacha20-ietf-poly1305 -k test123" -x -e "kcpclient" -k "-r SSSERVER_IP:6500 -l :6500 -mode fast2"
 ```
 
 **以上命令相当于执行了** 
 
 ``` sh
-ss-local -s 127.0.0.1 -p 6500 -b 0.0.0.0 -l 1080 -m aes-256-cfb -k xiaofengfeng --fast-open 
+ss-local -s 127.0.0.1 -p 6500 -b 0.0.0.0 -l 1080 -m chacha20-ietf-poly1305 -k test123
 kcpclient -r SSSERVER_IP:6500 -l :6500 -mode fast2
 ```
 
@@ -74,9 +71,9 @@ kcpclient -r SSSERVER_IP:6500 -l :6500 -mode fast2
 使用时可指定环境变量，如下
 
 ``` sh
-docker run -dt --name ss -p 6443:6443 -p 6500:6500/udp -e SS_CONFIG="-s 0.0.0.0 -p 6443 -m aes-256-cfb -k xiaofengfeng --fast-open" -e KCP_MODULE="kcpserver" -e KCP_CONFIG="-t 127.0.0.1:6443 -l :6500 -mode fast2" -e KCP_FLAG="true" lianshufeng/shadowsocks
+docker run -dt --name ss -p 6443:6443 -p 6500:6500/udp -e SS_CONFIG="-s 0.0.0.0 -p 6443 -m chacha20-ietf-poly1305 -k test123" -e KCP_MODULE="kcpserver" -e KCP_CONFIG="-t 127.0.0.1:6443 -l :6500 -mode fast2" -e KCP_FLAG="true" lianshufeng/shadowsocks
 ```
-
 
 #### 客户端
 [进入下载页面](https://github.com/shadowsocks/shadowsocks-windows/releases/)
+
