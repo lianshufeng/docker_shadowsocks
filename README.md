@@ -4,7 +4,7 @@
 ### 打开姿势
 
 ``` sh
-docker run -dt --name ss -p 8756:6443 lianshufeng/shadowsocks -s "-s 0.0.0.0 -p 6443 -m chacha20-ietf-poly1305 -k xiaofengfeng"
+docker run -dt --restart=always --name ss -p 8756:6443 lianshufeng/shadowsocks -s "-s 0.0.0.0 -p 6443 -m chacha20-ietf-poly1305 -k xiaofengfeng"
 ```
 
 ### 支持选项
