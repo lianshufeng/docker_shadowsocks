@@ -13,6 +13,10 @@ ENV PLUGIN_OBFS_DOWNLOAD_URL https://github.com/shadowsocks/simple-obfs.git
 ENV PLUGIN_V2RAY_DOWNLOAD_URL https://github.com/shadowsocks/v2ray-plugin/releases/download/v1.0/v2ray-plugin-linux-amd64-8cea1a3.tar.gz
 ENV LINUX_HEADERS_DOWNLOAD_URL=http://dl-cdn.alpinelinux.org/alpine/v3.7/main/x86_64/linux-headers-4.4.6-r2.apk
 
+
+COPY runit /etc/service
+COPY entrypoint.sh /entrypoint.sh
+
 RUN apk upgrade \
     && apk add bash tzdata rng-tools runit \
     && apk add --virtual .build-deps \
@@ -28,7 +32,9 @@ RUN apk upgrade \
         pcre-dev \
         tar \
         git \
-    && curl -sSL ${LINUX_HEADERS_DOWNLOAD_URL} > /linux-headers-4.4.6-r2.apk \
+    && chmod -R 777 /etc/service \
+	&& chmod -R 777 /entrypoint.sh \
+	&& curl -sSL ${LINUX_HEADERS_DOWNLOAD_URL} > /linux-headers-4.4.6-r2.apk \
     && apk add --virtual .build-deps-kernel /linux-headers-4.4.6-r2.apk \
     && git clone ${SS_DOWNLOAD_URL} \
     && (cd shadowsocks-libev \
@@ -69,7 +75,6 @@ RUN apk upgrade \
 
 SHELL ["/bin/bash"]
 
-COPY runit /etc/service
-COPY entrypoint.sh /entrypoint.sh
+
 
 ENTRYPOINT ["/entrypoint.sh"]
