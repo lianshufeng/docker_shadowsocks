@@ -1,13 +1,8 @@
-## shadowsocks
-
-
-- **shadowsocks-libev 版本: 3.2.0**
-- **kcptun 版本: 20180316**
 
 ### 打开姿势
 
 ``` sh
-docker run --restart=always -dt --name ss -p 6443:6443 lianshufeng/shadowsocks -s "-s 0.0.0.0 -p 6443 -m aes-256-cfb -k xiaofengfeng --fast-open"
+docker run --restart=always -dt --name ss -p 8756:8756 lianshufeng/shadowsocks -s "-s 0.0.0.0 -p 8756 -m chacha20-ietf-poly1305 -k xiaofengfeng"
 ```
 
 ### 支持选项
@@ -31,26 +26,26 @@ docker run --restart=always -dt --name ss -p 6443:6443 lianshufeng/shadowsocks -
 **Server 端**
 
 ``` sh
-docker run -dt --name ssserver -p 6443:6443 -p 6500:6500/udp lianshufeng/shadowsocks -m "ss-server" -s "-s 0.0.0.0 -p 6443 -m aes-256-cfb -k xiaofengfeng --fast-open" -x -e "kcpserver" -k "-t 127.0.0.1:6443 -l :6500 -mode fast2"
+docker run -dt --name ssserver -p 6443:6443 -p 6500:6500/udp lianshufeng/shadowsocks -m "ss-server" -s "-s 0.0.0.0 -p 6443 -m chacha20-ietf-poly1305 -k test123" -x -e "kcpserver" -k "-t 127.0.0.1:6443 -l :6500 -mode fast2"
 ```
 
 **以上命令相当于执行了**
 
 ``` sh
-ss-server -s 0.0.0.0 -p 6443 -m aes-256-cfb -k xiaofengfeng --fast-open
+ss-server -s 0.0.0.0 -p 6443 -m chacha20-ietf-poly1305 -k test123
 kcpserver -t 127.0.0.1:6443 -l :6500 -mode fast2
 ```
 
 **Client 端**
 
 ``` sh
-docker run -dt --name ssclient -p 1080:1080 lianshufeng/shadowsocks -m "ss-local" -s "-s 127.0.0.1 -p 6500 -b 0.0.0.0 -l 1080 -m aes-256-cfb -k xiaofengfeng --fast-open" -x -e "kcpclient" -k "-r SSSERVER_IP:6500 -l :6500 -mode fast2"
+docker run -dt --name ssclient -p 1080:1080 lianshufeng/shadowsocks -m "ss-local" -s "-s 127.0.0.1 -p 6500 -b 0.0.0.0 -l 1080 -m chacha20-ietf-poly1305 -k test123" -x -e "kcpclient" -k "-r SSSERVER_IP:6500 -l :6500 -mode fast2"
 ```
 
 **以上命令相当于执行了** 
 
 ``` sh
-ss-local -s 127.0.0.1 -p 6500 -b 0.0.0.0 -l 1080 -m aes-256-cfb -k xiaofengfeng --fast-open 
+ss-local -s 127.0.0.1 -p 6500 -b 0.0.0.0 -l 1080 -m chacha20-ietf-poly1305 -k test123
 kcpclient -r SSSERVER_IP:6500 -l :6500 -mode fast2
 ```
 
@@ -74,9 +69,19 @@ kcpclient -r SSSERVER_IP:6500 -l :6500 -mode fast2
 使用时可指定环境变量，如下
 
 ``` sh
-docker run -dt --name ss -p 6443:6443 -p 6500:6500/udp -e SS_CONFIG="-s 0.0.0.0 -p 6443 -m aes-256-cfb -k xiaofengfeng --fast-open" -e KCP_MODULE="kcpserver" -e KCP_CONFIG="-t 127.0.0.1:6443 -l :6500 -mode fast2" -e KCP_FLAG="true" lianshufeng/shadowsocks
+docker run -dt --name ss -p 6443:6443 -p 6500:6500/udp -e SS_CONFIG="-s 0.0.0.0 -p 6443 -m chacha20-ietf-poly1305 -k test123" -e KCP_MODULE="kcpserver" -e KCP_CONFIG="-t 127.0.0.1:6443 -l :6500 -mode fast2" -e KCP_FLAG="true" lianshufeng/shadowsocks
 ```
+
+### 容器平台说明
+
+**各大免费容器平台都已经对代理工具做了对应封锁，一是为了某些不可描述的原因，二是为了防止被利用称为 DDOS 工具等；基于种种原因，公共免费容器平台问题将不予回复**
+
+### GCE 随机数生成错误
+
+如果在 GCE 上使用本镜像，在特殊情况下可能会出现 `This system doesn't provide enough entropy to quickly generate high-quality random numbers.` 错误；
+这种情况是由于宿主机没有能提供足够的熵来生成随机数导致，修复办法可以考虑增加 `--device /dev/urandom:/dev/urandom` 选项来使用 `/dev/urandom` 来生成，不过并不算推荐此种方式
 
 
 #### 客户端
 [进入下载页面](https://github.com/shadowsocks/shadowsocks-windows/releases/)
+
