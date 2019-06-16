@@ -67,9 +67,22 @@ RUN apk upgrade \
         /etc/service \
         /var/cache/apk/*
 
-SHELL ["/bin/bash"]
 
 COPY runit /etc/service
 COPY entrypoint.sh /entrypoint.sh
+
+
+RUN apk add dos2unix \
+    && chmod -R 777 /etc/service \
+	&& chmod -R 777 /entrypoint.sh \
+    && dos2unix /etc/service/kcptun/run \
+	&& dos2unix /etc/service/shadowsocks/run \
+	&& dos2unix /entrypoint.sh 
+
+
+
+SHELL ["/bin/bash"]
+
+
 
 ENTRYPOINT ["/entrypoint.sh"]
