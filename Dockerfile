@@ -1,12 +1,12 @@
-FROM alpine:3.9
+FROM alpine:3.11.3
 
 LABEL maintainer="lianshufeng <251708339@qq.com>"
 
 ARG TZ='Asia/Shanghai'
 
 ENV TZ ${TZ}
-ENV SS_LIBEV_VERSION v3.2.5
-ENV KCP_VERSION 20190424
+ENV SS_LIBEV_VERSION v3.3.4
+ENV KCP_VERSION 20200226
 ENV SS_DOWNLOAD_URL https://github.com/shadowsocks/shadowsocks-libev.git 
 ENV KCP_DOWNLOAD_URL https://github.com/xtaci/kcptun/releases/download/v${KCP_VERSION}/kcptun-linux-amd64-${KCP_VERSION}.tar.gz
 ENV PLUGIN_OBFS_DOWNLOAD_URL https://github.com/shadowsocks/simple-obfs.git
