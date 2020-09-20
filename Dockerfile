@@ -28,8 +28,8 @@ RUN apk upgrade \
         pcre-dev \
         tar \
         git \
-    && curl -sSL ${LINUX_HEADERS_DOWNLOAD_URL} > /linux-headers-4.4.6-r2.apk \
-    && apk add --virtual .build-deps-kernel /linux-headers-4.4.6-r2.apk \
+    && curl -sSL ${LINUX_HEADERS_DOWNLOAD_URL} > /linux-headers.apk \
+    && apk add --virtual .build-deps-kernel /linux-headers.apk \
     && git clone ${SS_DOWNLOAD_URL} \
     && (cd shadowsocks-libev \
     && git checkout tags/${SS_LIBEV_VERSION} -b ${SS_LIBEV_VERSION} \
@@ -59,7 +59,7 @@ RUN apk upgrade \
       $(scanelf --needed --nobanner /usr/bin/ss-* /usr/local/bin/obfs-* \
       | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
       | sort -u) \
-    && rm -rf /linux-headers-4.4.6-r2.apk \
+    && rm -rf /linux-headers.apk \
         kcptun-linux-amd64-${KCP_VERSION}.tar.gz \
         shadowsocks-libev \
         simple-obfs \
