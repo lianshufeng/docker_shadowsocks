@@ -1,3 +1,10 @@
+### 版本：
+````shell
+alpine 3.12.1
+SS_LIBEV_VERSION v3.3.5
+KCP_VERSION 20201126
+````
+
 
 ### 打开姿势
 
