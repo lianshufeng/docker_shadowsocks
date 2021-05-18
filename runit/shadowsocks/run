@@ -10,8 +10,8 @@ fi
 if [ -n "${SS_CONFIG}" ]; then
     echo "starting shadowsocks..."
 	# update root user , support 80 port ..
-    # exec chpst -u shadowsocks ${SS_MODULE} ${SS_CONFIG}
-	exec ${SS_MODULE} ${SS_CONFIG}
+    exec chpst -u shadowsocks ${SS_MODULE} ${SS_CONFIG}
+	# exec ${SS_MODULE} ${SS_CONFIG}
 else
     echo "Error: SS_CONFIG is empty, exit!"
     exit 1
