@@ -1,16 +1,85 @@
-### 版本：
-````shell
-alpine 3.12.1
-SS_LIBEV_VERSION v3.3.5
-KCP_VERSION 20201126
-````
-
+## shadowsocks
 
 ### 打开姿势
 
 ``` sh
-docker run --restart=always -dt --name ss -p 8756:8756 lianshufeng/shadowsocks -s "-s 0.0.0.0 -p 8756 -m chacha20-ietf-poly1305 -k xiaofengfeng"
+docker run -dt --restart=always --name ss -p 8756:6443 -p 8687:6500/udp registry.cn-chengdu.aliyuncs.com/1s/shadowsocks -s "-s 0.0.0.0 -p 6443 -m xchacha20-ietf-poly1305 -k xiaofengfeng" -x -e "kcpserver" -k "-t 127.0.0.1:6443 -l :6500 -mode fast3"
 ```
+
+### v2ray simple
+````shell
+version: "3"
+
+services:
+  shadowsocks:
+    image: registry.cn-chengdu.aliyuncs.com/1s/shadowsocks
+    ports:
+      - "8756:6443"
+      - "80:80"
+      - "8687:6500/udp"
+    container_name: ss
+    restart: always
+    command: -s "-s 0.0.0.0 -p 6443 -m xchacha20-ietf-poly1305 -k xiaofengfeng -p 80 --plugin v2ray-plugin --plugin-opts server " -x -e "kcpserver" -k "-t 127.0.0.1:6443 -l :6500 -mode fast3"
+````
+
+### v2ray ssl kcptun
+- .env
+````shell
+#证书路径
+certPath=/opt/docker/nginx/cert/letsencrypt/archive/dzurl.top
+certFile=fullchain1.pem
+certKeyFile=privkey1.pem
+
+#密码
+password=xiaofengfeng
+
+#加密方式
+mode=xchacha20-ietf-poly1305
+
+#域名
+v2ray_host=ss.dzurl.top
+````
+- docker-compose.yml
+````shell
+version: "3"
+
+services:
+  ss_v2ray_web:
+    image: registry.cn-chengdu.aliyuncs.com/1s/shadowsocks
+    ports:
+      - "8080:80"
+    container_name: ss_v2ray_web
+    restart: always
+    command: -s "-s 0.0.0.0 -p 6443 -m ${mode} -k ${password} -p 80 --plugin v2ray-plugin --plugin-opts server"
+
+  ss_v2ray_ssl:
+    image: registry.cn-chengdu.aliyuncs.com/1s/shadowsocks
+    ports:
+      - "8443:443"
+    container_name: ss_v2ray_ssl
+    volumes:
+      - "${certPath}:/cert"
+    restart: always
+    command: -s "-s 0.0.0.0 -p 6443 -m ${mode} -k ${password} -p 443 --plugin v2ray-plugin --plugin-opts server;tls;host=${v2ray_host};cert=/cert/${certFile};key=/cert/${certKeyFile}"
+
+  ss_kcptun:
+    image: registry.cn-chengdu.aliyuncs.com/1s/shadowsocks
+    ports:
+      - "8756:6443"
+      - "8687:6500/udp"
+    container_name: ss_kcptun
+    restart: always
+    command: -s "-s 0.0.0.0 -p 6443 -m ${mode} -k ${password}" -x -e "kcpserver" -k "-t 127.0.0.1:6443 -l :6500 -mode fast3"
+````
+
+
+### 防火墙
+````shell
+sudo firewall-cmd --add-port=8443/tcp --permanent
+sudo firewall-cmd --add-port=8756/tcp --permanent
+sudo firewall-cmd --add-port=8687/udp --permanent
+firewall-cmd --reload 
+````
 
 ### 支持选项
 
@@ -79,16 +148,32 @@ kcpclient -r SSSERVER_IP:6500 -l :6500 -mode fast2
 docker run -dt --name ss -p 6443:6443 -p 6500:6500/udp -e SS_CONFIG="-s 0.0.0.0 -p 6443 -m chacha20-ietf-poly1305 -k test123" -e KCP_MODULE="kcpserver" -e KCP_CONFIG="-t 127.0.0.1:6443 -l :6500 -mode fast2" -e KCP_FLAG="true" lianshufeng/shadowsocks
 ```
 
-### 容器平台说明
 
-**各大免费容器平台都已经对代理工具做了对应封锁，一是为了某些不可描述的原因，二是为了防止被利用称为 DDOS 工具等；基于种种原因，公共免费容器平台问题将不予回复**
+### 测试
+````shell
+curl --socks5-hostname 127.0.0.1:1080 www.google.com
+````
 
-### GCE 随机数生成错误
+#### shadowsocks
+[shadowsocks](https://github.com/shadowsocks/shadowsocks-windows/releases/)
 
-如果在 GCE 上使用本镜像，在特殊情况下可能会出现 `This system doesn't provide enough entropy to quickly generate high-quality random numbers.` 错误；
-这种情况是由于宿主机没有能提供足够的熵来生成随机数导致，修复办法可以考虑增加 `--device /dev/urandom:/dev/urandom` 选项来使用 `/dev/urandom` 来生成，不过并不算推荐此种方式
+#### kcptun
+[kcptun](https://github.com/xtaci/kcptun/releases)
+````shell
+client_windows_amd64.exe -r 204.44.94.8:8687 -l :1030 -mode fast3
+````
+
+####  v2ray-plugin
+[v2ray](https://github.com/shadowsocks/v2ray-plugin/releases)
+````shell
+#程序
+v2ray-plugin_windows_amd64
+#选项
+tls;host=ss.dzurl.top
+````
 
 
-#### 客户端
-[进入下载页面](https://github.com/shadowsocks/shadowsocks-windows/releases/)
+#### 浏览器插件
+[进入下载页面](https://github.com/FelisCatus/SwitchyOmega/releases)
+
 
