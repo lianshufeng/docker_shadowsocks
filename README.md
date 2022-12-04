@@ -1,10 +1,15 @@
 ## shadowsocks
 
 ### 打开姿势
-
-``` sh
+```` sh
 docker run -dt --restart=always --name ss -p 8756:6443 -p 8687:6500/udp lianshufeng/shadowsocks -s "-s 0.0.0.0 -p 6443 -m xchacha20-ietf-poly1305 -k xiaofengfeng" -x -e "kcpserver" -k "-t 127.0.0.1:6443 -l :6500 -mode fast3"
-```
+````
+
+### 命令行
+```` sh
+ss-server -s 0.0.0.0 -p 6443 -m xchacha20-ietf-poly1305 -k xiaofengfeng -p 80 --plugin v2ray-plugin --plugin-opts server
+````
+
 
 ### v2ray simple
 ````shell
@@ -71,6 +76,8 @@ services:
     restart: always
     command: -s "-s 0.0.0.0 -p 6443 -m ${mode} -k ${password}" -x -e "kcpserver" -k "-t 127.0.0.1:6443 -l :6500 -mode fast3"
 ````
+
+
 
 
 ### 防火墙
