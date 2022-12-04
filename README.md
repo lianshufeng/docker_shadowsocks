@@ -3,7 +3,7 @@
 ### 打开姿势
 
 ``` sh
-docker run -dt --restart=always --name ss -p 8756:6443 -p 8687:6500/udp registry.cn-chengdu.aliyuncs.com/1s/shadowsocks -s "-s 0.0.0.0 -p 6443 -m xchacha20-ietf-poly1305 -k xiaofengfeng" -x -e "kcpserver" -k "-t 127.0.0.1:6443 -l :6500 -mode fast3"
+docker run -dt --restart=always --name ss -p 8756:6443 -p 8687:6500/udp lianshufeng/shadowsocks -s "-s 0.0.0.0 -p 6443 -m xchacha20-ietf-poly1305 -k xiaofengfeng" -x -e "kcpserver" -k "-t 127.0.0.1:6443 -l :6500 -mode fast3"
 ```
 
 ### v2ray simple
@@ -102,14 +102,14 @@ firewall-cmd --reload
 **Server 端**
 
 ``` sh
-docker run -dt --name ssserver -p 6443:6443 -p 6500:6500/udp lianshufeng/shadowsocks -m "ss-server" -s "-s 0.0.0.0 -p 6443 -m chacha20-ietf-poly1305 -k test123" -x -e "kcpserver" -k "-t 127.0.0.1:6443 -l :6500 -mode fast2"
+docker run -dt --name ssserver -p 6443:6443 -p 6500:6500/udp lianshufeng/shadowsocks -m "ss-server" -s "-s 0.0.0.0 -p 6443 -m chacha20-ietf-poly1305 -k test123" -x -e "kcpserver" -k "-t 127.0.0.1:6443 -l :6500 -mode fast3"
 ```
 
 **以上命令相当于执行了**
 
 ``` sh
-ss-server -s 0.0.0.0 -p 6443 -m chacha20-ietf-poly1305 -k test123
-kcpserver -t 127.0.0.1:6443 -l :6500 -mode fast2
+ss-server -s 0.0.0.0 -p 6443 -m xchacha20-ietf-poly1305 -k xiaofengfeng
+kcpserver -t 127.0.0.1:6443 -l :6500 -mode fast3
 ```
 
 **Client 端**
