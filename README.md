@@ -12,7 +12,7 @@ version: "3"
 
 services:
   shadowsocks:
-    image: registry.cn-chengdu.aliyuncs.com/1s/shadowsocks
+    image: lianshufeng/shadowsocks
     ports:
       - "8756:6443"
       - "80:80"
@@ -45,7 +45,7 @@ version: "3"
 
 services:
   ss_v2ray_web:
-    image: registry.cn-chengdu.aliyuncs.com/1s/shadowsocks
+    image: lianshufeng/shadowsocks
     ports:
       - "8080:80"
     container_name: ss_v2ray_web
@@ -53,7 +53,7 @@ services:
     command: -s "-s 0.0.0.0 -p 6443 -m ${mode} -k ${password} -p 80 --plugin v2ray-plugin --plugin-opts server"
 
   ss_v2ray_ssl:
-    image: registry.cn-chengdu.aliyuncs.com/1s/shadowsocks
+    image: lianshufeng/shadowsocks
     ports:
       - "8443:443"
     container_name: ss_v2ray_ssl
@@ -63,7 +63,7 @@ services:
     command: -s "-s 0.0.0.0 -p 6443 -m ${mode} -k ${password} -p 443 --plugin v2ray-plugin --plugin-opts server;tls;host=${v2ray_host};cert=/cert/${certFile};key=/cert/${certKeyFile}"
 
   ss_kcptun:
-    image: registry.cn-chengdu.aliyuncs.com/1s/shadowsocks
+    image: lianshufeng/shadowsocks
     ports:
       - "8756:6443"
       - "8687:6500/udp"

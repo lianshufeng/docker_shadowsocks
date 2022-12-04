@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  ss_v2ray_web:
+    image: lianshufeng/shadowsocks
+    ports:
+      - "80:80"
+    container_name: ss_v2ray_web
+    restart: always
+    command: -s "-s 0.0.0.0 -p 6443 -m ${mode} -k ${password} -p 80 --plugin v2ray-plugin --plugin-opts server"
+
+  ss_v2ray_ssl:
+    image: lianshufeng/shadowsocks
+    ports:
+      - "443:443"
+    container_name: ss_v2ray_ssl
+    volumes:
+      - "${certPath}:/cert"
+    restart: always
+    command: -s "-s 0.0.0.0 -p 6443 -m ${mode} -k ${password} -p 443 --plugin v2ray-plugin --plugin-opts server;tls;host=${v2ray_host};cert=${certFile};key=${certKeyFile}"
+
+  ss_kcptun:
+    image: lianshufeng/shadowsocks
+    ports:
+      - "8080:6443"
+      - "8756:6443"
+      - "8687:6500/udp"
+    container_name: ss_kcptun
+    restart: always
+    command: -s "-s 0.0.0.0 -p 6443 -m ${mode} -k ${password}" -x -e "kcpserver" -k "-t 127.0.0.1:6443 -l :6500 -mode fast3"
