@@ -1,4 +1,4 @@
-FROM alpine:3.20
+FROM alpine:3.19
 
 LABEL maintainer="lianshufeng <251708339@qq.com>"
 
@@ -12,7 +12,7 @@ ENV SS_DOWNLOAD_URL https://github.com/shadowsocks/shadowsocks-libev.git
 ENV KCP_DOWNLOAD_URL https://github.com/xtaci/kcptun/releases/download/v${KCP_VERSION}/kcptun-linux-amd64-${KCP_VERSION}.tar.gz
 ENV PLUGIN_OBFS_DOWNLOAD_URL https://github.com/shadowsocks/simple-obfs.git
 ENV PLUGIN_V2RAY_DOWNLOAD_URL https://github.com/shadowsocks/v2ray-plugin/releases/download/${V2RAY_VERSION}/v2ray-plugin-linux-amd64-${V2RAY_VERSION}.tar.gz
-ENV LINUX_HEADERS_DOWNLOAD_URL=https://dl-cdn.alpinelinux.org/alpine/v3.20/main/x86_64/linux-headers-6.6-r0.apk
+ENV LINUX_HEADERS_DOWNLOAD_URL=https://dl-cdn.alpinelinux.org/alpine/v3.19/main/x86_64/linux-headers-6.5-r0.apk
 
 RUN apk upgrade \
     && apk add bash tzdata rng-tools runit \
