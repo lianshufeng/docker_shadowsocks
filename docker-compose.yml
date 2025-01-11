@@ -9,15 +9,15 @@ services:
     restart: always
     command: -s "-s 0.0.0.0 -p 6443 -m ${mode} -k ${password} -p 80 --plugin v2ray-plugin --plugin-opts server"
 
-  ss_v2ray_ssl:
-    image: lianshufeng/shadowsocks
-    ports:
-      - "443:443"
-    container_name: ss_v2ray_ssl
-    volumes:
-      - "${certPath}:/cert"
-    restart: always
-    command: -s "-s 0.0.0.0 -p 6443 -m ${mode} -k ${password} -p 443 --plugin v2ray-plugin --plugin-opts server;tls;host=${v2ray_host};cert=${certFile};key=${certKeyFile}"
+  # ss_v2ray_ssl:
+    # image: lianshufeng/shadowsocks
+    # ports:
+      # - "443:443"
+    # container_name: ss_v2ray_ssl
+    # volumes:
+      # - "${certPath}:/cert"
+    # restart: always
+    # command: -s "-s 0.0.0.0 -p 6443 -m ${mode} -k ${password} -p 443 --plugin v2ray-plugin --plugin-opts server;tls;host=${v2ray_host};cert=${certFile};key=${certKeyFile}"
 
   ss_kcptun:
     image: lianshufeng/shadowsocks
