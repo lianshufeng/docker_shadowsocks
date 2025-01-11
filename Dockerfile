@@ -63,11 +63,11 @@ COPY --from=v2ray /opt/v2ray-plugin /usr/bin
 
 # 拷贝ss
 COPY --from=shadowsocks /usr/bin/ss-* /usr/bin
-COPY --from=shadowsocks /usr/lib/libmbedcrypto.so.7 /usr/lib/libmbedcrypto.so.7
-COPY --from=shadowsocks /usr/lib/libev.so.4 /usr/lib/libev.so.4
-COPY --from=shadowsocks /usr/lib/libcares.so.2 /usr/lib/libcares.so.2
-COPY --from=shadowsocks /usr/lib/libpcre.so.1 /usr/lib/libpcre.so.1
-COPY --from=shadowsocks /usr/lib/libsodium.so.26 /usr/lib/libsodium.so.26
+COPY --from=shadowsocks /usr/lib/libmbedcrypto.so.* /usr/lib
+COPY --from=shadowsocks /usr/lib/libev.so.* /usr/lib
+COPY --from=shadowsocks /usr/lib/libcares.so.* /usr/lib
+COPY --from=shadowsocks /usr/lib/libpcre.so.* /usr/lib
+COPY --from=shadowsocks /usr/lib/libsodium.so.* /usr/lib
 
 
 COPY runit /etc/service
